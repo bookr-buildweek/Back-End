@@ -1,6 +1,10 @@
 const server = require('../../server');
 const request = require('supertest')(server);
 
+afterAll(async () => {
+	await new Promise(resolve => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
+});
+
 describe('Authentication', () => {
   it('Users are able to sign up', () => {
     return request

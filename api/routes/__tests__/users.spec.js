@@ -7,26 +7,30 @@ let id;
 
 beforeAll((done) => {
   request
-    .post('/api/register')
+  .post('/api/register')
+  .send({
+    first_name: 'Mark',
+    last_name: 'Rob',
+    email: 'mark@gmail.com',
+    password: 'password',
+  })
+  .then((res) => {
+    request
+    .post('/api/login')
     .send({
-      first_name: 'Mark',
-      last_name: 'Rob',
       email: 'mark@gmail.com',
       password: 'password',
     })
-    .then((res) => {
-      request
-        .post('/api/login')
-        .send({
-          email: 'mark@gmail.com',
-          password: 'password',
-        })
-        .end((err, res) => {
-          id = res.body.user.id;
-          token = res.body.token;
-          done();
-        });
+    .end((err, res) => {
+      id = res.body.user.id;
+      token = res.body.token;
+      done();
     });
+  });
+});
+
+afterAll(async () => {
+  await new Promise((resolve) => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
 });
 
 describe('Users', () => {
@@ -48,3 +52,4 @@ describe('Users', () => {
       .expect(200);
   });
 });
+

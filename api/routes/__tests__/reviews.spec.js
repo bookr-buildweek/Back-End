@@ -30,6 +30,10 @@ beforeAll((done) => {
     });
 });
 
+afterAll(async () => {
+	await new Promise(resolve => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
+});
+
 describe('Reviews', () => {
   it('Should require authorization', () => {
     return request.get(`/api/user/${id}/reviews`).expect(401);
