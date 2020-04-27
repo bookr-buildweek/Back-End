@@ -31,10 +31,10 @@ beforeAll((done) => {
 });
 
 afterAll(async () => {
-	await new Promise(resolve => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
+  await new Promise((resolve) => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
 });
 
-describe('Reviews', () => {
+describe('Reviews auth check and addition', () => {
   it('Should require authorization', () => {
     return request.get(`/api/user/${id}/reviews`).expect(401);
   });
@@ -53,7 +53,7 @@ describe('Reviews', () => {
           'Accessible to all students with a sound background in high school mathematics, A Concise Introduction to Pure Mathematics, Third Edition presents some of the most fundamental and beautiful ideas in pure mathematics. It covers not only standard material but also many interesting topics not usually encountered at this level, such as the theory of solving cubic equations, the use of Euler’s formula to study the five Platonic solids, the use of prime numbers to encode and decode secret information, and the theory of how to compare the sizes of two infinite sets.',
         url:
           'http://books.google.com/books/content?id=JjQrpYswtYEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
-        category: 'Mathematics'
+        category: 'Mathematics',
       })
       .then((res) => {
         bookID = res.body.id;
@@ -73,7 +73,9 @@ describe('Reviews', () => {
           .expect(200);
       });
   });
+});
 
+describe('Reviews id check', () => {
   it('Should return an object of review when user post a review', () => {
     return request
       .post(`/api/user/${id}/reviews`)

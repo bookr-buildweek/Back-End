@@ -29,10 +29,10 @@ beforeAll((done) => {
 });
 
 afterAll(async () => {
-	await new Promise(resolve => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
+  await new Promise((resolve) => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
 });
 
-describe('Books', () => {
+describe('Books auth and addition', () => {
   it('Should require authorization', () => {
     return request.get('/api/books').expect(401);
   });
@@ -63,7 +63,9 @@ describe('Books', () => {
         bookId = res.body.id;
       });
   });
+});
 
+describe('Books id check', () => {
   it('Should return an object of an individual book when the id is passed in the url', () => {
     return request
       .get(`/api/books/${bookId}`)
