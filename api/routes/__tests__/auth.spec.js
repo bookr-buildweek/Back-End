@@ -1,4 +1,3 @@
-const db = require('../../../database/dbConfig');
 const server = require('../../server');
 const request = require('supertest')(server);
 

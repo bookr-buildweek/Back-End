@@ -8,8 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "test": "cross-env DB_ENV=testing jest --coverage --verbose --forceExit",
-    "pretest": "yarn run rollback && yarn run migrate && yarn run seed",
+    "test": "cross-env DB_ENV=testing yarn run rollback && yarn run migrate && jest --coverage --verbose --forceExit",
     "migrate": "knex migrate:latest --env=testing",
     "rollback": "knex migrate:rollback --env=testing",
     "seed": "knex seed:run --env=testing"
