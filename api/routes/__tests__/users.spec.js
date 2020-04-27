@@ -22,7 +22,6 @@ beforeAll((done) => {
           password: 'password',
         })
         .end((err, res) => {
-          console.log(res.body)
           id = res.body.user.id;
           token = res.body.token;
           done();
