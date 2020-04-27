@@ -58,7 +58,6 @@ module.exports = {
 
       if (book) {
         const userShelf = await Shelf.getUserShelf(user_id);
-        console.log(userShelf);
 
         const bookExists = userShelf.filter(
           book => book.book_id === Number(id)

@@ -19,6 +19,10 @@ module.exports = {
       directory: './database/migrations',
       tableName: 'bookr_test'
     },
+    "pool": {
+      "min" : 1,
+      "max": 7
+    },
     seeds: { directory: './database/seeds' }
   },
   production: {

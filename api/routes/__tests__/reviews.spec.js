@@ -2,53 +2,90 @@ require('dotenv').config();
 
 const server = require('../../server');
 const request = require('supertest')(server);
+let id;
 let token;
+let bookID;
 
-beforeAll(done => {
+beforeAll((done) => {
   request
-    .post('/api/login')
+    .post('/api/register')
     .send({
-      email: 'bob@gmail.com',
-      password: 'password'
+      first_name: 'Jane',
+      last_name: 'Robert',
+      email: 'jane@gmail.com',
+      password: 'password',
     })
-
-    .end((err, res) => {
-      token = res.body.token;
-      done();
+    .then((res) => {
+      request
+        .post('/api/login')
+        .send({
+          email: 'jane@gmail.com',
+          password: 'password',
+        })
+        .end((err, res) => {
+          id = res.body.user.id;
+          token = res.body.token;
+          done();
+        });
     });
 });
 
-describe('Reviews', () => {
+afterAll(async () => {
+  await new Promise((resolve) => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
+});
+
+describe('Reviews auth check and addition', () => {
   it('Should require authorization', () => {
-    return request.get('/api/user/1/reviews').expect(401);
+    return request.get(`/api/user/${id}/reviews`).expect(401);
   });
   it('Should return an array of user reviews when header is set with token', () => {
     return request
-      .post('/api/books/2/review')
+      .post('/api/books')
       .set('Authorization', token)
       .send({
-        review: 'Awesome read!',
-        reviewer: 1,
-        ratings: 5
+        isbn: 9781439835982,
+        title: 'Concise Introduction to Pure Mathematics',
+        subtitle: 'Third Edition',
+        author: 'Martin Liebeck',
+        published: '2010',
+        publisher: 'CRC Press',
+        description:
+          'Accessible to all students with a sound background in high school mathematics, A Concise Introduction to Pure Mathematics, Third Edition presents some of the most fundamental and beautiful ideas in pure mathematics. It covers not only standard material but also many interesting topics not usually encountered at this level, such as the theory of solving cubic equations, the use of Euler’s formula to study the five Platonic solids, the use of prime numbers to encode and decode secret information, and the theory of how to compare the sizes of two infinite sets.',
+        url:
+          'http://books.google.com/books/content?id=JjQrpYswtYEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api',
+        category: 'Mathematics',
       })
-      .then(res => {
+      .then((res) => {
+        bookID = res.body.id;
         return request
-          .get('/api/user/1/reviews')
+          .post(`/api/books/${bookID}/review`)
+          .set('Authorization', token)
+          .send({
+            review: 'Awesome read!',
+            reviewer: id,
+            ratings: 5,
+          });
+      })
+      .then(() => {
+        return request
+          .get(`/api/user/${id}/reviews`)
           .set('Authorization', token)
           .expect(200);
       });
   });
+});
 
+describe('Reviews id check', () => {
   it('Should return an object of review when user post a review', () => {
     return request
-      .post('/api/books/2/review')
+      .post(`/api/user/${id}/reviews`)
       .set('Authorization', token)
       .send({
         review: 'Awesome read!',
-        reviewer: 2,
-        ratings: 5
+        reviewer: id,
+        ratings: 5,
       })
-      .expect(201);
+      .expect(200);
   });
 
   it('Should return an object of review when user gets a review by ID', () => {
@@ -71,8 +108,8 @@ describe('Reviews', () => {
       .set('Authorization', token)
       .send({
         review: 'Awesome read! Really understood the subject',
-        reviewer: 2,
-        ratings: 5
+        reviewer: id,
+        ratings: 5,
       })
       .expect(200);
   });
