@@ -1,10 +1,6 @@
 const server = require('../../server');
 const request = require('supertest')(server);
 
-afterAll(async () => {
-	await new Promise(resolve => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
-});
-
 describe('Authentication', () => {
   it('Users are able to sign up', () => {
     return request
@@ -13,29 +9,19 @@ describe('Authentication', () => {
         first_name: 'Pamela',
         last_name: 'Robert',
         email: 'pamela@gmail.com',
-        password: 'password'
+        password: 'password',
       })
-      .expect(201)
-      .expect('Content-Type', /json/);
+      .expect('Content-Type', /json/)
+      .expect(201);
   });
-  it('Users are able to login', async () => {
+  it('Users are able to login', () => {
     return request
-      .post('/api/register')
+      .post('/api/login')
       .send({
-        first_name: 'Pamela',
-        last_name: 'Robert',
         email: 'pamela@gmail.com',
-        password: 'password'
+        password: 'password',
       })
-      .then(res => {
-        return request
-          .post('/api/login')
-          .send({
-            email: 'pamela@gmail.com',
-            password: 'password'
-          })
-          .expect(200);
-      });
+      .expect(200);
   });
 
   it('Gives error message when username or password is not inputed', () => {
@@ -43,7 +29,7 @@ describe('Authentication', () => {
       .post('/api/register')
       .send({
         first_name: 'Pamela',
-        email: 'pamela@gmail.com'
+        email: 'pamela@gmail.com',
       })
       .expect(422);
   });

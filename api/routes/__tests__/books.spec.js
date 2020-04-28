@@ -28,10 +28,6 @@ beforeAll((done) => {
     });
 });
 
-afterAll(async () => {
-  await new Promise((resolve) => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
-});
-
 describe('Books auth and addition', () => {
   it('Should require authorization', () => {
     return request.get('/api/books').expect(401);

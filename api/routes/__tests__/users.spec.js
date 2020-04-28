@@ -14,7 +14,7 @@ beforeAll((done) => {
     email: 'mark@gmail.com',
     password: 'password',
   })
-  .then((res) => {
+  .then(() => {
     request
     .post('/api/login')
     .send({
@@ -29,20 +29,16 @@ beforeAll((done) => {
   });
 });
 
-afterAll(async () => {
-  await new Promise((resolve) => setTimeout(() => resolve(), 1000)); // avoid jest open handle error
-});
-
 describe('Users', () => {
   it('Should require authorization', () => {
     return request.get(`/api/users/${id}`).expect(401);
   });
 
-  it('Should return an object of a user when the id is passed in the url', () => {
+  it('Should return an object of a user when the id is passed in the url', (done) => {
     return request
       .get(`/api/users/${id}`)
       .set('Authorization', token)
-      .expect(200);
+      .expect(200, done);
   });
 
   xit('Should return an array of a user books on shelf when the id is passed in the url', () => {
