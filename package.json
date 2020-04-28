@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "cross-env DB_ENV=testing yarn run test_script",
-    "test_script": "yarn run rollback && yarn run migrate && jest --runInBand --verbose --detectOpenHandles --forceExit",
+    "test_script": "yarn run rollback && yarn run migrate && jest --maxWorkers=4 --verbose --detectOpenHandles --forceExit",
     "migrate": "knex migrate:latest --env=testing",
     "rollback": "knex migrate:rollback --env=testing",
     "seed": "knex seed:run --env=testing"
