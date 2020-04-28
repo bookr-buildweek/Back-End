@@ -38,6 +38,7 @@ beforeAll((done) => {
         .end((err, res) => {
           id = res.body.user.id;
           token = res.body.token;
+          if (err) return done(err);
           done();
         });
     });

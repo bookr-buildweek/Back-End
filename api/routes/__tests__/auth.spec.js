@@ -24,13 +24,13 @@ describe('Authentication', () => {
       .expect(200);
   });
 
-  it('Gives error message when username or password is not inputed', () => {
+  it('Gives error message when username or password is not inputed', (done) => {
     return request
       .post('/api/register')
       .send({
         first_name: 'Pamela',
         email: 'pamela@gmail.com',
       })
-      .expect(422);
+      .expect(422, done);
   });
 });
