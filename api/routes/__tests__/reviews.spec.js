@@ -24,7 +24,7 @@ beforeAll((done) => {
     .post('/api/register')
     .send({
       first_name: 'Jane',
-      last_name: 'Robert',
+      last_name: 'Rob',
       email: 'jane@gmail.com',
       password: 'password',
     })
@@ -38,7 +38,6 @@ beforeAll((done) => {
         .end((err, res) => {
           id = res.body.user.id;
           token = res.body.token;
-          if (err) return done(err);
           done();
         });
     });
