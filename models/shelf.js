@@ -23,6 +23,5 @@ module.exports = {
       .where({ id })
       .del()
       .returning('*');
-    ˇ;
   }
 };
