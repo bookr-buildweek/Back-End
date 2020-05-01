@@ -63,6 +63,7 @@ exports.up = function(knex) {
 
 exports.down = function(knex, Promise) {
   return knex.schema
+    .dropTableIfExists('users')
     .dropTableIfExists('shelf')
     .dropTableIfExists('reviews')
     .dropTableIfExists('books');
