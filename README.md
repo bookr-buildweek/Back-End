@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bookr-buildweek/Back-End.svg?branch=master)](https://travis-ci.org/bookr-buildweek/Back-End)
+
 # Bookr - Back-End
 
 Bookr is your source for all things Text Book. Picture the AirBNB of text books, a social platform for peer reviewed text books.
